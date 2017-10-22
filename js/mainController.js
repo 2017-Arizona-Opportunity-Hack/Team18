@@ -1,14 +1,44 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['chart.js']);
 
 app.controller('MainController', ['$http','$scope',
 function ($http,$scope,$route,$rootScope, $moment){
     $scope.jsonData = [];
     $scope.hashMap = [];
+    $scope.years = [2017,2016,2015,2014,2013]
+
+    $scope.failedChart = {
+        type: 'horizontalBar',
+        labels: ['Total Teachers', 'Total School', 'Total County', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        colors: [ '#c4c4c4','#d63131'],
+        data :  [
+                    [1,2,3,4,5,6,7,8]
+                ],
+        options: {
+            title: {
+                display: true,
+                text: '',
+                fontSize: 20
+            },
+            scales: {
+                xAxes: [{
+                            gridLines: {
+                                display:false
+                            }
+                        }],
+                yAxes: [{
+                            gridLines: {
+                                display:false
+                            }   
+                        }]
+                }
+        }
+    };
 
     $scope.hoverOver = function(element){
         $scope['element' + element.target.id] = {'fill':'blue'};
     }
 
+    
     $scope.generateData = function(){
         var data = $scope.jsonData;
         var years = {};
