@@ -9,16 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <!-- Include your CSS here -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.js"></script>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
     
     <script src="js/mainController.js"></script>    
     
@@ -29,17 +28,32 @@
         href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div class="container"  ng-controller="MainController" ng-init="loadJson()">
-        <div class="row">
-            <div class="col-6">
-                    <div id='statisticArea'>
-                        </div>
-                        Stats
-                        <div>
+    <div class="container"  style="width:100%;padding-top:2%;" ng-controller="MainController" ng-init="loadJson()">
+            <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" style="width:100%;" type="button" data-toggle="dropdown">Dropdown Example
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">HTML</a></li>
+                      <li><a href="#">CSS</a></li>
+                      <li><a href="#">JavaScript</a></li>
+                    </ul>
+                  </div>
+        <div class="row" >
+            <div class="col-md-7">
+                <div id='statisticArea' style="height:100%;">
                     </div>
+                        <canvas id="failedPerDay" style="height:100%;" class="chart chart-horizontalBar" 
+                            chart-labels="failedChart.labels" 
+                            chart-data="failedChart.data" 
+                            chart-series="failedChart.series"
+                            chart-colors="failedChart.colors"
+                            chart-options="failedChart.options">
+                        </canvas>   
+                    <div>
+                </div>
             </div>
-            <div class="col-6">
-                <svg
+            <div class="col-md-5" style="text-align:right;margin-right:0px;">
+                    <svg 
                     xmlns:dc="http://purl.org/dc/elements/1.1/"
                     xmlns:cc="http://creativecommons.org/ns#"
                     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -48,7 +62,7 @@
                     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
                     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
                     version="1.1"
-                    width="600"
+                    width="500"
                     height="800"
                     viewBox="-27555 -29379 54617.002 63307.002"
                     id="svg2"
@@ -225,7 +239,6 @@
                 </svg>
             </div>
         </div>
-
 
     </div>
 

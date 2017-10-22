@@ -1,4 +1,4 @@
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['chart.js']);
 
 app.controller('MainController', ['$http','$scope',
 function ($http,$scope,$route,$rootScope, $moment){
@@ -6,6 +6,35 @@ function ($http,$scope,$route,$rootScope, $moment){
     $scope.hashMap = [];
     var countyData = [];
     var countyMap = [];
+    $scope.years = [2017,2016,2015,2014,2013]
+
+    $scope.failedChart = {
+        type: 'horizontalBar',
+        labels: ['Total Teachers', 'Total School', 'Total County', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        colors: [ '#c4c4c4','#d63131'],
+        data :  [
+                    [1,2,3,4,5,6,7,8]
+                ],
+        options: {
+            title: {
+                display: true,
+                text: '',
+                fontSize: 20
+            },
+            scales: {
+                xAxes: [{
+                            gridLines: {
+                                display:false
+                            }
+                        }],
+                yAxes: [{
+                            gridLines: {
+                                display:false
+                            }   
+                        }]
+                }
+        }
+    };
     $scope.hoverOver = function(element){
         $scope['element' + element.target.id] = {'fill':'blue'};
     }
@@ -28,6 +57,7 @@ function ($http,$scope,$route,$rootScope, $moment){
     	console.log(countyMap[county]);
     }
 
+    
     $scope.generateData = function(){
         var data = $scope.jsonData;
         var countyArray = ['Maricopa','Pima', 'Pinal', 'Yavapai', 'Mohave', 'Yuma', 'Cochise', 'Coconino', 'Navajo', 'Apache', 'Gila', 'Santa Cruz', 'Graham','La Paz', 'Greenlee']
