@@ -1,10 +1,15 @@
 var app = angular.module('myApp', ['chart.js']);
 
+
+
 app.controller('MainController', ['$http','$scope',
 function ($http,$scope,$route,$rootScope, $moment){
     $scope.jsonData = [];
     $scope.hashMap = [];
+    var countyData = [];
+    var countyMap = [];
     $scope.years = [2017,2016,2015,2014,2013]
+    $scope.schoolList = [];
 
     $scope.failedChart = {
         type: 'horizontalBar',
@@ -33,14 +38,38 @@ function ($http,$scope,$route,$rootScope, $moment){
                 }
         }
     };
-
     $scope.hoverOver = function(element){
         $scope['element' + element.target.id] = {'fill':'blue'};
+    }
+    function getCountyFilter(){
+    	var countyFilteredMap = {};
+    	for(var m=0; m<countyData.length; m++){
+    		var countyValue = countyData[m].county;
+    		if(!countyFilteredMap[countyValue]){
+                countyFilteredMap[countyValue] = [];
+                countyFilteredMap[countyValue].push(countyData[m]);
+            }else{
+                countyFilteredMap[countyValue].push(countyData[m]);
+            }
+    	}
+    	return countyFilteredMap;
+    }
+
+    $scope.getCountyData = function(id){
+    	var county = id.target.id;
+    	console.log(countyMap[county]);
     }
 
     
     $scope.generateData = function(){
+        console.log($scope.jsonData);  
         var data = $scope.jsonData;
+        var countyArray = ['Maricopa','Pima', 'Pinal', 'Yavapai', 'Mohave', 'Yuma', 'Cochise', 'Coconino', 'Navajo', 'Apache', 'Gila', 'Santa Cruz', 'Graham','La Paz', 'Greenlee']
+        countyData = data;
+        for(var j=0 ; j<data.length ; j++)
+        	countyData[j].county = countyArray[Math.floor(Math.random() * countyArray.length)]; 
+        countyMap = getCountyFilter();
+        console.log(countyMap);
         var years = {};
         var yearMetric = {};
         var newSchoolThisYear = 0;
@@ -57,9 +86,7 @@ function ($http,$scope,$route,$rootScope, $moment){
             }else{
                 years[year].push(data[i]);
             }
-        }
-        
-      
+        }     
         for(var i=0;i< years[2017].length; i++)
         {
             var schoolname = years[2017][i].company_name;
@@ -75,9 +102,8 @@ function ($http,$scope,$route,$rootScope, $moment){
 
             if(!schoolnames[schoolname] && schoolname!= ""){
                // schoolnames[schoolname] = [];
-                 schoolnames[schoolname]= 3;
-                 console.log(schoolname);
-                console.log(schoolnames[schoolname]);
+                 schoolnames[schoolname]= 1;
+                 
 
             }else if(schoolname!= ""){
                 var scount = schoolnames[schoolname];
@@ -94,45 +120,47 @@ function ($http,$scope,$route,$rootScope, $moment){
               //  years[year].push(data[i]);
             //} 
         }
-        
-    
-
         for(year in years){
-            console.log(year);
+            //console.log(year);
             for(var i = 0; i < years[year].length; i ++){
-                console.log(years[year][i].last_name)
-                
+                //console.log(years[year][i].last_name);                
             }
         }
         
-        // for(var year in years){
-        //     var curYear = years[year];
-        //     for(var i = 0; i < curYear.length; i ++){                         
-        //          //console.log(curYear[i].company_name);
-                
-        //         if(curYear[i].company_name){
-        //             var school = curYear[i].company_name;
-        //             if(!schools[school]){
-        //                 schools[school] = 1;
-        //             }else{
-        //                 schools[school] += 1;
-        //             }
-        //         }
-        //     }
-        // }
-        
-        // console.log(years);
-        // console.log('number of registered people in 2017 is ' + years['2017'].length);
     }
 
     $scope.hoverLeave = function(element){
         $scope['element' + element.target.id] = {'fill':'#b9b9b9'};
     }
 
+    function getRandomBtwn(min, max) {
+        var rand =  Math.random() * (max - min) + min;
+        return Math.round(rand);
+      }
+
     $scope.loadJson = function(){
         $http.get('contact.json').then(function(response) {
             $scope.jsonData =  response.data.results;
+            $scope.generateData();
         });
+
+        //create mock data 
+        $http.get('https://code.org/schools.json').then(function(response) {
+            var qualify = ['Y','N'];
+            var schools = response.data.schools;
+            var schoolNames = []
+            for(var i = 0; i < schools.length; i ++){
+                if(schools[i].state === "AZ"){
+                    schoolNames.push(schools[i].name);
+                }
+            }
+            for(var i = 0; i < $scope.jsonData.length; i ++){
+                $scope.jsonData[i]['school'] = schoolNames[getRandomBtwn(0,schoolNames.length)];
+                $scope.jsonData[i]['highly_qualify'] = qualify[getRandomBtwn(0,qualify.length)];
+                $scope.jsonData[i]['reduce_lunch'] = getRandomBtwn(0,100) + '%';
+            }
+        }); 
+
 
     }; 
 
