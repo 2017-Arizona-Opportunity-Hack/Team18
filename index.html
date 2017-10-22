@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Team 18</title>
+    <title>Arizona Council of Economic Education</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -103,11 +103,12 @@
                         </canvas>   
                         <div ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
                                 <div class="panel-body" >
+                                    <h3><b>Statistics on teachers </b></h3>
                                     <ul>
-                                        <li><h4>Highly Qualified teachers : <small style="font-size:20px;">{{highly_Qualify_Count}}/{{highly_Qualify_Total_Count}}</small></h4></li>
-                                        <li><h4>New teachers this year: <small style="font-size:20px;">{{newTeachNSchool[0]}}</small></h4></li>
-                                        <li><h4>Most teachers from {{countyTitle}} have subject specialization in : <small style="font-size:20px;">{{subjectSpecial}}</small></h4></li>
-                                        <li><h4>Most teachers from {{countyTitle}} teach for : <small style="font-size:20px;">{{gradLevel}}</small></h4></li>
+                                        <li><h4><b>New teachers added this year: </b><small style="font-size:20px;">{{newTeachNSchool[0]}}</small></h4></li>
+                                        <li><h4><b>Highly Qualified teachers : </b><small style="font-size:20px;">{{highly_Qualify_Count}}/{{highly_Qualify_Total_Count}}</small></h4></li>
+                                        <li><h4><b>Most teachers from {{countyTitle}} have subject specialization in : </b><small style="font-size:20px;">{{subjectSpecial}}</small></h4></li>
+                                        <li><h4><b>Most teachers from {{countyTitle}} teach for : </b><small style="font-size:20px;">{{gradLevel}}</small></h4></li>
                                     </ul>
                                 </div>
                             </div>
@@ -153,9 +154,10 @@
                     </canvas>
                     <div ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
                             <div class="panel-body">
+                                <h3><b>Statistics on schools</b></h3>
                                 <ul>
-                                    <li><h4>School with low reduced lunch : <small style="font-size:20px;">{{low_Reduced_Count}}/{{schoolSet[0]}}</small></h4></li>   
-                                    <li><h4>New Schools : <small style="font-size:20px;">{{newTeachNSchool[1]}}</small></h4></li>    
+                                    <li><h4><b>Schools with reduced price lunch : </b><small style="font-size:20px;">{{low_Reduced_Count}}/{{schoolSet[0]}}</small></h4></li>
+                                    <li><h4><b>New Schools added this year: </b><small style="font-size:20px;">{{newTeachNSchool[1]}}</small></h4></li>    
                                 </ul>                                
                             </div>
                           </div>
