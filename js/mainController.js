@@ -14,6 +14,9 @@ function ($http,$scope,$route,$rootScope, $moment){
         var years = {};
         var yearMetric = {};
         var newSchoolThisYear = 0;
+        var peoplecount =0;
+        var Schoolcount = 0;
+        var schoolnames ={};
 
         for(var i = 0 ; i < data.length ; i ++){
             var date = new Date(data[i].created_date);
@@ -25,6 +28,44 @@ function ($http,$scope,$route,$rootScope, $moment){
                 years[year].push(data[i]);
             }
         }
+        
+      
+        for(var i=0;i< years[2017].length; i++)
+        {
+            var schoolname = years[2017][i].company_name;
+            var peoplename = years[2017][i].first_name;
+            //new Date(years[2017][i].company_name);
+           // console.log(years[2017].length);
+           if(schoolname!= "")
+            Schoolcount++;
+            
+
+            if(peoplename!= "")
+                peoplecount++;
+
+            if(!schoolnames[schoolname] && schoolname!= ""){
+               // schoolnames[schoolname] = [];
+                 schoolnames[schoolname]= 3;
+                 console.log(schoolname);
+                console.log(schoolnames[schoolname]);
+
+            }else if(schoolname!= ""){
+                var scount = schoolnames[schoolname];
+                schoolnames[schoolname] = ++scount;
+               
+
+            }
+           // console.log(schoolname);
+           // var year = schoolname.
+          //  if(!years[year]){
+            //    years[year] = [];
+              //  years[year].push(data[i]);
+            //}else{
+              //  years[year].push(data[i]);
+            //} 
+        }
+        
+    
 
         for(year in years){
             console.log(year);
