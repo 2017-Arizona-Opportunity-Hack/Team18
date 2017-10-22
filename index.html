@@ -90,7 +90,7 @@
                                             }],
                                     yAxes: [{        
                                                 categoryPercentage: 1,
-                                                barPercentage: .5,
+                                                barPercentage: .9,
                                                 categorySpacing: 2,
                                                 stacked: true,                                        
                                                 gridLines: {
@@ -113,8 +113,6 @@
                             </div>
                         <hr>
                         <canvas  ng-show="showStatisticArea2" id="failedPerDay" style="max-width:70% !important;max-height:100px !important;" class="chart chart-horizontalBar" 
-                        chart-labels="['Schools']" 
-                        chart-data="[dataSet[1]]"
                         chart-labels="schoolCompare" 
                         chart-data="schoolSet" 
                         chart-series="failedChart.series"
@@ -142,7 +140,7 @@
                                         }],
                                 yAxes: [{        
                                             categoryPercentage: 1,
-                                            barPercentage: .5,
+                                            barPercentage: .9,
                                             categorySpacing: 2,
                                             stacked: true,                                        
                                             gridLines: {
