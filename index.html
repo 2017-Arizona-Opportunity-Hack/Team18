@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Team 18</title>
+    <title>Arizona Council of Economic Education</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -90,7 +90,7 @@
                                             }],
                                     yAxes: [{        
                                                 categoryPercentage: 1,
-                                                barPercentage: .5,
+                                                barPercentage: .9,
                                                 categorySpacing: 2,
                                                 stacked: true,                                        
                                                 gridLines: {
@@ -101,11 +101,15 @@
                             }">
                             
                         </canvas>   
-                        <div  ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
+                        <div ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
                                 <div class="panel-body" >
-                                    <hr style="padding:0">
-                                    <h4>Highly Qualify : <small style="font-size:20px;">234/42342</small></h4>
-                                    <h4>New teachers : <small style="font-size:20px;">42342</small></h4>                                    
+                                    <h3><b>Statistics on teachers </b></h3>
+                                    <ul>
+                                        <li><h4><b>New teachers added this year: </b><small style="font-size:20px;">{{newTeachNSchool[0]}}</small></h4></li>
+                                        <li><h4><b>Highly Qualified teachers : </b><small style="font-size:20px;">{{highly_Qualify_Count}}/{{highly_Qualify_Total_Count}}</small></h4></li>
+                                        <li><h4><b>Most teachers from {{countyTitle}} have subject specialization in : </b><small style="font-size:20px;">{{subjectSpecial}}</small></h4></li>
+                                        <li><h4><b>Most teachers from {{countyTitle}} teach for : </b><small style="font-size:20px;">{{gradLevel}}</small></h4></li>
+                                    </ul>
                                 </div>
                             </div>
                         <hr>
@@ -137,7 +141,7 @@
                                         }],
                                 yAxes: [{        
                                             categoryPercentage: 1,
-                                            barPercentage: .5,
+                                            barPercentage: .9,
                                             categorySpacing: 2,
                                             stacked: true,                                        
                                             gridLines: {
@@ -149,13 +153,19 @@
                         
                     </canvas>
                     <div ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
-                        <div class="panel-body">
-                                <h4>School with low reduced lunch : <small style="font-size:20px;">234/42342</small></h4>   
-                                <h4>New Schools : <small style="font-size:20px;">42342</small></h4>                                    
-                        </div>
+                            <div class="panel-body">
+                                <h3><b>Statistics on schools</b></h3>
+                                <ul>
+                                    <li><h4><b>Schools with reduced price lunch : </b><small style="font-size:20px;">{{low_Reduced_Count}}/{{schoolSet[0]}}</small></h4></li>
+                                    <li><h4><b>New Schools added this year: </b><small style="font-size:20px;">{{newTeachNSchool[1]}}</small></h4></li>    
+                                </ul>                                
+                            </div>
+                          </div>
+                    <div>
+                        
+                        
                     </div>
                     <div class="btn-group dropup" ng-show="showStatisticArea2" dropdown>
-                            
                 </div>
             </div>
             <div class="col-md-5" style="text-align:right;margin-right:0px;">

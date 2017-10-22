@@ -28,6 +28,12 @@ function ($http,$scope,$route,$rootScope, $moment){
     $scope.schoolList = [];
     $scope.metricMap = {};
     $scope.countyTitle = '';
+    $scope.subjectSpecial = '';
+    $scope.gradLevel = '';
+    $scope.highly_Qualify_Total_Count = 0;
+    $scope.highly_Qualify_Count = 0;
+    $scope.low_Reduced_Total_Count = 0;
+    $scope.low_Reduced_Count = 0;
     $scope.toggleCompareTo = 'Compare?'
     $scope.toggleYear = new Date().getFullYear().toString();
     $scope.tickMax = 1;
@@ -38,13 +44,11 @@ function ($http,$scope,$route,$rootScope, $moment){
     $scope.failedChart = {
         type: 'horizontalBar',
         labels: ['Teachers','Schools'],
-        colors: [ '#c4c4c4']
+        colors: [ '#f9214a']
     };
     $scope.compareYears = ['2017','2016','2015']
 
     $scope.togglingCompare = function(year){
-        console.log($scope.teacherSet); 
-        
         $scope.toggleCompareTo = "Comparing to " + year;
         $scope.teacherSet[1] = 5;
         $scope.teachersCompare[1] = ('Total Teachers in ' + year);
@@ -54,6 +58,7 @@ function ($http,$scope,$route,$rootScope, $moment){
     }
 
     $scope.hoverOver = function(element){
+        $scope['element' + element.target.id] = {'fill':'#f9214a'};
         if(element.target.id != $scope.currentActive){
             $scope['element' + element.target.id] = {'fill':'#f2b0bc'};
         }
@@ -79,6 +84,7 @@ function ($http,$scope,$route,$rootScope, $moment){
     $scope.getCountyData = function(id){
         var county = (id.target.id).replace("_",' ');
         var thisYear = new Date().getFullYear().toString();
+        $scope.countyTitle = county;
 
         if(!$scope.currentActive){
             $scope.currentActive = id.target.id;
@@ -98,13 +104,67 @@ function ($http,$scope,$route,$rootScope, $moment){
         computeYearlyMetric(countyMap[county],county);
         $scope.simpleComputation();
     }
-    $scope.simpleComputation = function(){
+    	$scope.simpleComputation = function(){
         var choseTime = $scope.metricMap[$scope.toggleYear];
-        //console.log($scope.metricMap);
         var previousYears = JSON.parse(JSON.stringify($scope.metricMap))
         var thisYear = new Date().getFullYear().toString();
         delete previousYears[thisYear];
         $scope.newTeachNSchool = getNewDatas($scope.metricMap[thisYear], previousYears);
+        $scope.dataSet = [(choseTime['teachers']).unique().length, (choseTime['schools']).unique().length];
+        var highlyQualifyTotalCount = $scope.metricMap[thisYear]['highly_qualify'].length;
+        var highlyQualifyCount = 0;
+        for(var i=0;i<highlyQualifyTotalCount;i++)
+        {
+        	if ($scope.metricMap[thisYear]['highly_qualify'][i]==='Y') {
+        		highlyQualifyCount++;
+        	}
+        }
+        $scope.highly_Qualify_Total_Count = highlyQualifyTotalCount;
+    	$scope.highly_Qualify_Count = highlyQualifyCount;
+        
+		var lowReducedTotalCount = $scope.metricMap[thisYear]['reduce_lunch'].length;
+        var lowReducedCount = 0;
+        for(var i=0;i<lowReducedTotalCount;i++)
+        {
+        	if (parseFloat($scope.metricMap[thisYear]['reduce_lunch'][i])<=40) {
+        		lowReducedCount++;
+        	}
+        }
+        $scope.low_Reduced_Total_Count = lowReducedTotalCount;
+    	$scope.low_Reduced_Count = lowReducedCount;
+    	var modeGradMap = {};
+        var modeSplMap = {};
+	    var maxGradEl = $scope.metricMap[thisYear]['graduate_level'][0], maxGradCount = 1, maxSplCount = 1;
+	    var maxSplEl = $scope.metricMap[thisYear]['specialization'][0];
+	    for(var i = 0; i < $scope.metricMap[thisYear]['graduate_level'].length; i++)
+	    {
+	        var el = $scope.metricMap[thisYear]['graduate_level'][i];
+	        if(modeGradMap[el] == null)
+	            modeGradMap[el] = 1;
+	        else
+	            modeGradMap[el]++;  
+	        if(modeGradMap[el] > maxGradCount)
+	        {
+	            maxGradEl = el;
+	            maxGradCount = modeGradMap[el];
+	        }
+	    }
+	    for(var i = 0; i < $scope.metricMap[thisYear]['specialization'].length; i++)
+	    {
+	        var el = $scope.metricMap[thisYear]['specialization'][i];
+	        if(modeSplMap[el] == null)
+	            modeSplMap[el] = 1;
+	        else
+	            modeSplMap[el]++;  
+	        if(modeSplMap[el] > maxGradCount)
+	        {
+	            modeSplEl = el;
+	            modeSplCount = modeSplMap[el];
+	        }
+	    }
+	    $scope.subjectSpecial = maxSplEl;
+        $scope.gradLevel = maxGradEl;
+        $scope.tickMax = $scope.dataSet[0] + ($scope.dataSet[0]/10);
         $scope.schoolSet = [(choseTime['schools']).unique().length];
         $scope.teacherSet = [(choseTime['teachers']).unique().length];
 
@@ -144,18 +204,28 @@ function ($http,$scope,$route,$rootScope, $moment){
             var date = new Date(map[i].created_date);
             var school = map[i].school;
             var name = map[i].first_name +' '+ map[i].middle_name +' '+ map[i].last_name;
+            var specialization = map[i].subject_spl;
+            var graduate_status = map[i].graduate_level;
+            var lowReducedLunch = map[i].reduce_lunch;
             if(!metricMap[date.getFullYear()]){
                 metricMap[date.getFullYear()] = {};
                 metricMap[date.getFullYear()]['teachers'] = [name];
                 metricMap[date.getFullYear()]['schools'] = [school];
                 metricMap[date.getFullYear()]['highly_qualify'] = [map[i].highly_qualify];
+                metricMap[date.getFullYear()]['specialization'] = [specialization];
+                metricMap[date.getFullYear()]['graduate_level'] = [graduate_status];
+                metricMap[date.getFullYear()]['reduce_lunch'] = [lowReducedLunch];
             }else{
                 metricMap[date.getFullYear()]['teachers'].push(name);
                 metricMap[date.getFullYear()]['schools'].push(school);
                 metricMap[date.getFullYear()]['highly_qualify'].push(map[i].highly_qualify);
+                metricMap[date.getFullYear()]['specialization'].push(specialization);
+                metricMap[date.getFullYear()]['graduate_level'].push(graduate_status);
+                metricMap[date.getFullYear()]['reduce_lunch'].push(lowReducedLunch);
             }
         }
         $scope.metricMap = metricMap;
+        console.log($scope.metricMap);
     }
 
     Array.prototype.contains = function(v) {
@@ -186,7 +256,6 @@ function ($http,$scope,$route,$rootScope, $moment){
 
     $scope.hoverLeave = function(element){
         if(element.target.id !== $scope.currentActive){
-            console.log(1);
             $scope['element' + element.target.id] = {'fill':'#b9b9b9'};
         }
     }
@@ -214,15 +283,16 @@ function ($http,$scope,$route,$rootScope, $moment){
                     schoolNames.push(schools[i].name);
                 }
             }
+            var subject_special = ['Social Studies','Visual Arts','English','Finance','Economics','Photography','Mathematics','Marketing','History'];
+            var graduate_level = ['Elementary school','Middle school', 'High school', 'College'];
             for(var i = 0; i < $scope.jsonData.length; i ++){
                 $scope.jsonData[i]['created_date'] = randYears[getRandomBtwn(0,2)];
                 $scope.jsonData[i]['school'] = schoolNames[getRandomBtwn(0,schoolNames.length-1)];
                 $scope.jsonData[i]['highly_qualify'] = qualify[getRandomBtwn(0,qualify.length-1)];
                 $scope.jsonData[i]['reduce_lunch'] = getRandomBtwn(0,100) + '%';
-
+             	$scope.jsonData[i]['subject_spl'] = subject_special[getRandomBtwn(0,subject_special.length-1)];
+             	$scope.jsonData[i]['graduate_level'] = graduate_level[getRandomBtwn(0,graduate_level.length-1)];   
             }
-
-            console.log($scope.jsonData);
         }); 
     }; 
 
