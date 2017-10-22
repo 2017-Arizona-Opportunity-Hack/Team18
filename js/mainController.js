@@ -19,6 +19,7 @@ function ($http,$scope,$route,$rootScope, $moment){
             });
         }
     }
+    
     $scope.jsonData = [];
     $scope.hashMap = [];
     $scope.newTeachNSchool = [];
@@ -26,22 +27,36 @@ function ($http,$scope,$route,$rootScope, $moment){
     var countyMap = [];
     $scope.schoolList = [];
     $scope.metricMap = {};
-    $scope.countyTitle = ''
+    $scope.countyTitle = '';
+    $scope.toggleCompareTo = 'Compare?'
     $scope.toggleYear = new Date().getFullYear().toString();
     $scope.tickMax = 1;
-
+    $scope.schoolCompare = ['Total Schools',''];
+    $scope.teachersCompare = ['Total Teachers',''];
+    $scope.teacherSet = [0,0];
+    $scope.schoolSet = [0,0];
     $scope.failedChart = {
         type: 'horizontalBar',
         labels: ['Teachers','Schools'],
         colors: [ '#c4c4c4']
     };
+    $scope.compareYears = ['2017','2016','2015']
 
-    function generateDataForChart(map,year){
+    $scope.togglingCompare = function(year){
+        console.log($scope.teacherSet); 
         
+        $scope.toggleCompareTo = "Comparing to " + year;
+        $scope.teacherSet[1] = 5;
+        $scope.teachersCompare[1] = ('Total Teachers in ' + year);
+
+        $scope.schoolSet[1] = 9;
+        $scope.schoolCompare[1] = ('Total Schools in ' + year);
     }
 
     $scope.hoverOver = function(element){
-        $scope['element' + element.target.id] = {'fill':'blue'};
+        if(element.target.id != $scope.currentActive){
+            $scope['element' + element.target.id] = {'fill':'#f2b0bc'};
+        }
     }
 
     function getCountyFilter(){
@@ -57,22 +72,46 @@ function ($http,$scope,$route,$rootScope, $moment){
     	}
     	return countyFilteredMap;
     }
-
+    $scope.togglingYear = function(year){
+        $scope.toggleYear = year;
+        $scope.simpleComputation();
+    }
     $scope.getCountyData = function(id){
         var county = (id.target.id).replace("_",' ');
-        computeYearlyMetric(countyMap[county],county);
+        var thisYear = new Date().getFullYear().toString();
 
+        if(!$scope.currentActive){
+            $scope.currentActive = id.target.id;
+            $scope['element' + $scope.currentActive] = {'fill':'#f92148'};                 
+        }else{
+            $scope['element' + $scope.currentActive] = {'fill':'#b9b9b9'};                             
+            $scope['element' + id.target.id] = {'fill':'#f92148'};
+            $scope.currentActive = id.target.id;      
+        }
+        
+        var index = $scope.compareYears.indexOf(thisYear);
+        if (index > -1) {
+            $scope.compareYears.splice(index, 1);
+        }
+
+        $scope.countyTitle = county;        
+        computeYearlyMetric(countyMap[county],county);
+        $scope.simpleComputation();
+    }
+    $scope.simpleComputation = function(){
         var choseTime = $scope.metricMap[$scope.toggleYear];
         //console.log($scope.metricMap);
         var previousYears = JSON.parse(JSON.stringify($scope.metricMap))
         var thisYear = new Date().getFullYear().toString();
         delete previousYears[thisYear];
         $scope.newTeachNSchool = getNewDatas($scope.metricMap[thisYear], previousYears);
-        $scope.dataSet = [(choseTime['teachers']).unique().length, (choseTime['schools']).unique().length],
-        
+        $scope.schoolSet = [(choseTime['schools']).unique().length];
+        $scope.teacherSet = [(choseTime['teachers']).unique().length];
 
-        $scope.countyTitle = county;
-        $scope.tickMax = $scope.dataSet[0] + ($scope.dataSet[0]/10);
+        $scope.teachersCompare[1] = ('');
+        $scope.schoolCompare[1] = ('');
+        $scope.toggleCompareTo = 'Compare?'
+        $scope.tickMax = $scope.teacherSet[0] + ($scope.teacherSet/3);
         $scope.showDropdown = true;
         $scope.statisticArea = true;
         $scope.showStatisticArea2 = true;
@@ -88,12 +127,12 @@ function ($http,$scope,$route,$rootScope, $moment){
                 lastyearsSchools = Array.prototype.concat.apply(lastyearsSchools,lastYear[year]['teachers']);
             }
         }
+        
         for(var i = 0; i < thisYear['teachers'].length ; i++){
-            if(lastYearTeachers.indexOf(thisYear['teachers'][i]) !== -1)newThisYear[0] +=1;
-       
+            if(lastYearTeachers.indexOf(thisYear['teachers'][i]) === -1)newThisYear[0] +=1;
         }
         for(var i = 0; i < thisYear['schools'].length ; i++){
-            if(lastYearTeachers.indexOf(thisYear['schools'][i]) !== -1)newThisYear[1] +=1;
+            if(lastYearTeachers.indexOf(thisYear['schools'][i]) === -1)newThisYear[1] +=1;
         }
         return newThisYear;
     }
@@ -146,7 +185,10 @@ function ($http,$scope,$route,$rootScope, $moment){
     }
 
     $scope.hoverLeave = function(element){
-        $scope['element' + element.target.id] = {'fill':'#b9b9b9'};
+        if(element.target.id !== $scope.currentActive){
+            console.log(1);
+            $scope['element' + element.target.id] = {'fill':'#b9b9b9'};
+        }
     }
 
     function getRandomBtwn(min, max) {
@@ -177,6 +219,7 @@ function ($http,$scope,$route,$rootScope, $moment){
                 $scope.jsonData[i]['school'] = schoolNames[getRandomBtwn(0,schoolNames.length-1)];
                 $scope.jsonData[i]['highly_qualify'] = qualify[getRandomBtwn(0,qualify.length-1)];
                 $scope.jsonData[i]['reduce_lunch'] = getRandomBtwn(0,100) + '%';
+
             }
 
             console.log($scope.jsonData);
