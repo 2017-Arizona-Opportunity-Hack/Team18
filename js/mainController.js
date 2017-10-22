@@ -4,13 +4,38 @@ app.controller('MainController', ['$http','$scope',
 function ($http,$scope,$route,$rootScope, $moment){
     $scope.jsonData = [];
     $scope.hashMap = [];
-
+    var countyData = [];
+    var countyMap = [];
     $scope.hoverOver = function(element){
         $scope['element' + element.target.id] = {'fill':'blue'};
+    }
+    function getCountyFilter(){
+    	var countyFilteredMap = {};
+    	for(var m=0; m<countyData.length; m++){
+    		var countyValue = countyData[m].county;
+    		if(!countyFilteredMap[countyValue]){
+                countyFilteredMap[countyValue] = [];
+                countyFilteredMap[countyValue].push(countyData[m]);
+            }else{
+                countyFilteredMap[countyValue].push(countyData[m]);
+            }
+    	}
+    	return countyFilteredMap;
+    }
+
+    $scope.getCountyData = function(id){
+    	var county = id.target.id;
+    	console.log(countyMap[county]);
     }
 
     $scope.generateData = function(){
         var data = $scope.jsonData;
+        var countyArray = ['Maricopa','Pima', 'Pinal', 'Yavapai', 'Mohave', 'Yuma', 'Cochise', 'Coconino', 'Navajo', 'Apache', 'Gila', 'Santa Cruz', 'Graham','La Paz', 'Greenlee']
+        countyData = data;
+        for(var j=0 ; j<data.length ; j++)
+        	countyData[j].county = countyArray[Math.floor(Math.random() * countyArray.length)]; 
+        countyMap = getCountyFilter();
+        console.log(countyMap);
         var years = {};
         var yearMetric = {};
         var newSchoolThisYear = 0;
@@ -25,12 +50,10 @@ function ($http,$scope,$route,$rootScope, $moment){
                 years[year].push(data[i]);
             }
         }
-
         for(year in years){
-            console.log(year);
+            //console.log(year);
             for(var i = 0; i < years[year].length; i ++){
-                console.log(years[year][i].last_name)
-                
+                //console.log(years[year][i].last_name);                
             }
         }
         
@@ -61,7 +84,10 @@ function ($http,$scope,$route,$rootScope, $moment){
     $scope.loadJson = function(){
         $http.get('contact.json').then(function(response) {
             $scope.jsonData =  response.data.results;
+            $scope.generateData();
         });
+
+
 
     }; 
 
