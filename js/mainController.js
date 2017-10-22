@@ -84,6 +84,7 @@ function ($http,$scope,$route,$rootScope, $moment){
     $scope.getCountyData = function(id){
         var county = (id.target.id).replace("_",' ');
         var thisYear = new Date().getFullYear().toString();
+        $scope.countyTitle = county;
 
         if(!$scope.currentActive){
             $scope.currentActive = id.target.id;
@@ -103,7 +104,7 @@ function ($http,$scope,$route,$rootScope, $moment){
         computeYearlyMetric(countyMap[county],county);
         $scope.simpleComputation();
     }
-    $scope.simpleComputation = function(){
+    	$scope.simpleComputation = function(){
         var choseTime = $scope.metricMap[$scope.toggleYear];
         //console.log($scope.metricMap);
         var previousYears = JSON.parse(JSON.stringify($scope.metricMap))
@@ -154,7 +155,6 @@ function ($http,$scope,$route,$rootScope, $moment){
 	    }
 	    $scope.subjectSpecial = maxSplEl;
         $scope.gradLevel = maxGradEl;
-        $scope.countyTitle = county;
         $scope.tickMax = $scope.dataSet[0] + ($scope.dataSet[0]/10);
         $scope.schoolSet = [(choseTime['schools']).unique().length];
         $scope.teacherSet = [(choseTime['teachers']).unique().length];
