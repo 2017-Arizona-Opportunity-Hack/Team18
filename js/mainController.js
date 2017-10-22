@@ -198,6 +198,7 @@ function ($http,$scope,$route,$rootScope, $moment){
             var name = map[i].first_name +' '+ map[i].middle_name +' '+ map[i].last_name;
             var specialization = map[i].subject_spl;
             var graduate_status = map[i].graduate_level;
+            var lowReducedLunch = map[i].reduce_lunch;
             if(!metricMap[date.getFullYear()]){
                 metricMap[date.getFullYear()] = {};
                 metricMap[date.getFullYear()]['teachers'] = [name];
@@ -205,15 +206,18 @@ function ($http,$scope,$route,$rootScope, $moment){
                 metricMap[date.getFullYear()]['highly_qualify'] = [map[i].highly_qualify];
                 metricMap[date.getFullYear()]['specialization'] = [specialization];
                 metricMap[date.getFullYear()]['graduate_level'] = [graduate_status];
+                metricMap[date.getFullYear()]['reduce_lunch'] = [lowReducedLunch];
             }else{
                 metricMap[date.getFullYear()]['teachers'].push(name);
                 metricMap[date.getFullYear()]['schools'].push(school);
                 metricMap[date.getFullYear()]['highly_qualify'].push(map[i].highly_qualify);
                 metricMap[date.getFullYear()]['specialization'].push(specialization);
                 metricMap[date.getFullYear()]['graduate_level'].push(graduate_status);
+                metricMap[date.getFullYear()]['reduce_lunch'].push(lowReducedLunch);
             }
         }
         $scope.metricMap = metricMap;
+        console.log($scope.metricMap);
     }
 
     Array.prototype.contains = function(v) {
