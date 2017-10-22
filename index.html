@@ -87,17 +87,20 @@
                             }">
                             
                         </canvas>   
-                        <div  ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
+                        <div ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
                                 <div class="panel-body" >
-                                    <hr style="padding:0">
-                                    <h4>Highly Qualify : <small style="font-size:20px;">234/42342</small></h4>
-                                    <h4>New teachers : <small style="font-size:20px;">42342</small></h4>                                    
+                                    <ul>
+                                        <li><h4>Highly Qualified teachers : <small style="font-size:20px;">{{highly_Qualify_Count}}/{{highly_Qualify_Total_Count}}</small></h4></li>
+                                        <li><h4>New teachers this year: <small style="font-size:20px;">{{newTeachNSchool[0]}}</small></h4></li>
+                                        <li><h4>Most teachers from {{countyTitle}} have subject specialization in : <small style="font-size:20px;">{{subjectSpecial}}</small></h4></li>
+                                        <li><h4>Most teachers from {{countyTitle}} teach for : <small style="font-size:20px;">{{gradLevel}}</small></h4></li>
+                                    </ul>
                                 </div>
                             </div>
                         <hr>
                         <canvas  ng-show="showStatisticArea2" id="failedPerDay" style="max-width:70% !important;max-height:100px !important;" class="chart chart-horizontalBar" 
                         chart-labels="['Schools']" 
-                        chart-data="[dataSet[1]]" 
+                        chart-data="[dataSet[1]]"
                         chart-series="failedChart.series"
                         chart-colors="failedChart.colors"
                         class="chart chart-horizontalBar"
@@ -136,8 +139,10 @@
                     </canvas>
                     <div ng-show="showStatisticArea2" class="panel panel-default" style="margin-left:7%;">
                             <div class="panel-body">
-                                    <h4>School with low reduced lunch : <small style="font-size:20px;">234/42342</small></h4>   
-                                    <h4>New Schools : <small style="font-size:20px;">42342</small></h4>                                    
+                                <ul>
+                                    <li><h4>School with low reduced lunch : <small style="font-size:20px;">234/42342</small></h4></li>   
+                                    <li><h4>New Schools : <small style="font-size:20px;">{{newTeachNSchool[1]}}</small></h4></li>    
+                                </ul>                                
                             </div>
                           </div>
                     <div>
